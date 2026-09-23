@@ -236,12 +236,7 @@ export function LoginPage({ navigate }: LoginPageProps) {
                         {error}
                       </div>
                     )}
-                    {success && (
-                      <div className="flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-                        <CheckCircle2 className="h-4 w-4 shrink-0" />
-                        {success}
-                      </div>
-                    )}
+
 
                     <Button type="submit" className="w-full gap-2" disabled={citLoading}>
                       {citLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
