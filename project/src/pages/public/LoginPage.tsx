@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   User, ShieldCheck, Settings, Lock, ArrowRight, Eye, EyeOff,
-  Smartphone, KeyRound, AlertCircle, CheckCircle2, Info,
+  Smartphone, KeyRound, AlertCircle,
   Loader2, Mail, Calendar, MapPin, Home, GraduationCap, BookOpen,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -56,11 +56,11 @@ export function LoginPage({ navigate }: LoginPageProps) {
   const [suCourse, setSuCourse] = useState('');
   const [suLoading, setSuLoading] = useState(false);
 
-  // Officer / Admin state (mock)
-  const [officerEmail, setOfficerEmail] = useState('officer@fusiongrid.gov.in');
-  const [officerPass, setOfficerPass] = useState('Officer@123');
-  const [adminEmail, setAdminEmail] = useState('admin@fusiongrid.gov.in');
-  const [adminPass, setAdminPass] = useState('Admin@123');
+  // Officer / Admin state
+  const [officerEmail, setOfficerEmail] = useState('');
+  const [officerPass, setOfficerPass] = useState('');
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPass, setAdminPass] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -115,8 +115,8 @@ export function LoginPage({ navigate }: LoginPageProps) {
 
   const handleOfficerLogin = () => {
     setError('');
-    if (officerEmail !== 'officer@fusiongrid.gov.in' || officerPass !== 'Officer@123') {
-      setError('Invalid credentials. Use the demo credentials below.');
+    if (!officerEmail || !officerPass) {
+      setError('Please enter your email and password.');
       return;
     }
     login('officer');
@@ -125,8 +125,8 @@ export function LoginPage({ navigate }: LoginPageProps) {
 
   const handleAdminLogin = () => {
     setError('');
-    if (adminEmail !== 'admin@fusiongrid.gov.in' || adminPass !== 'Admin@123') {
-      setError('Invalid credentials. Use the demo credentials below.');
+    if (!adminEmail || !adminPass) {
+      setError('Please enter your email and password.');
       return;
     }
     login('admin');
@@ -248,18 +248,7 @@ export function LoginPage({ navigate }: LoginPageProps) {
                       {citLoading ? 'Signing in…' : 'Sign In'}
                     </Button>
 
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full gap-2 text-xs border-slate-200/80 bg-white/80 hover:bg-white text-slate-800 rounded-xl"
-                      onClick={() => {
-                        login('citizen');
-                        navigate(roleConfig.citizen.redirect);
-                      }}
-                    >
-                      Quick Demo Citizen Login
-                      <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
-                    </Button>
+
                   </form>
                 ) : (
                     <form onSubmit={(e) => { e.preventDefault(); handleCitizenSignup(); }} className="space-y-4">
@@ -271,7 +260,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                           id="su-name"
                           name="name"
                           autoComplete="name"
-                          placeholder="Aarav Sharma"
                           value={suName}
                           onChange={(e) => setSuName(e.target.value)}
                           className="pl-10"
@@ -286,7 +274,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                           id="su-email"
                           name="email"
                           autoComplete="email"
-                          placeholder="citizen@fusiongrid.gov.in"
                           type="email"
                           value={suEmail}
                           onChange={(e) => setSuEmail(e.target.value)}
@@ -302,7 +289,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                           id="su-pass"
                           name="new-password"
                           autoComplete="new-password"
-                          placeholder="At least 6 characters"
                           type={showCitPass ? 'text' : 'password'}
                           value={suPass}
                           onChange={(e) => setSuPass(e.target.value)}
@@ -322,7 +308,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                             id="su-mobile"
                             name="tel"
                             autoComplete="tel"
-                            placeholder="9876543210"
                             value={suMobile}
                             onChange={(e) => setSuMobile(e.target.value)}
                             className="pl-10"
@@ -354,7 +339,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                           id="su-address"
                           name="street-address"
                           autoComplete="street-address"
-                          placeholder="Flat 402, Sunshine Apts, Shivaji Nagar"
                           value={suAddress}
                           onChange={(e) => setSuAddress(e.target.value)}
                           className="pl-10"
@@ -369,7 +353,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                           id="su-district"
                           name="address-level2"
                           autoComplete="address-level2"
-                          placeholder="Pune"
                           value={suDistrict}
                           onChange={(e) => setSuDistrict(e.target.value)}
                           className="pl-10"
@@ -385,7 +368,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                             id="su-college"
                             name="organization"
                             autoComplete="organization"
-                            placeholder="COEP Technological University"
                             value={suCollege}
                             onChange={(e) => setSuCollege(e.target.value)}
                             className="pl-10"
@@ -399,7 +381,6 @@ export function LoginPage({ navigate }: LoginPageProps) {
                           <Input
                             id="su-course"
                             name="education"
-                            placeholder="B.Tech Computer Engineering"
                             value={suCourse}
                             onChange={(e) => setSuCourse(e.target.value)}
                             className="pl-10"
@@ -480,29 +461,7 @@ export function LoginPage({ navigate }: LoginPageProps) {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full gap-2 text-xs border-slate-200/80 bg-white/80 hover:bg-white text-slate-800 rounded-xl"
-                  onClick={() => {
-                    login('officer');
-                    navigate(roleConfig.officer.redirect);
-                  }}
-                >
-                  Quick Demo Officer Login
-                  <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
-                </Button>
 
-                <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-3">
-                  <p className="flex items-center gap-1.5 text-xs font-semibold text-blue-700">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                    Official Officer Credentials
-                  </p>
-                  <div className="mt-2 space-y-1 text-xs text-blue-800">
-                    <p>Email: <span className="font-mono font-semibold">officer@fusiongrid.gov.in</span></p>
-                    <p>Password: <span className="font-mono font-semibold">Officer@123</span></p>
-                  </div>
-                </div>
                 </form>
               </TabsContent>
 
@@ -561,29 +520,7 @@ export function LoginPage({ navigate }: LoginPageProps) {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full gap-2 text-xs border-slate-200/80 bg-white/80 hover:bg-white text-slate-800 rounded-xl"
-                  onClick={() => {
-                    login('admin');
-                    navigate(roleConfig.admin.redirect);
-                  }}
-                >
-                  Quick Demo Admin Login
-                  <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
-                </Button>
 
-                <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-3">
-                  <p className="flex items-center gap-1.5 text-xs font-semibold text-blue-700">
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                    Official Administrator Credentials
-                  </p>
-                  <div className="mt-2 space-y-1 text-xs text-blue-800">
-                    <p>Email: <span className="font-mono font-semibold">admin@fusiongrid.gov.in</span></p>
-                    <p>Password: <span className="font-mono font-semibold">Admin@123</span></p>
-                  </div>
-                </div>
                 </form>
               </TabsContent>
             </Tabs>
